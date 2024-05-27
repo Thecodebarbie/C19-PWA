@@ -35,4 +35,25 @@ export const getDb = async () => {
   return result;
 };
 
+function getCodeContentFromIndexedDB() {
+  return new Promise((resolve, reject) => {
+    // Assuming 'db' is your IndexedDB instance and 'store' is the object store
+    const transaction = db.transaction(['store'], 'readonly');
+    const objectStore = transaction.objectStore('store');
+    const request = objectStore.get('codeContent');
+
+    request.onsuccess = function(event) {
+      resolve(request.result);
+    };
+
+    request.onerror = function(event) {
+      reject('Error retrieving data from IndexedDB');
+    };
+  });
+}
+
+module.exports = {
+  getCodeContentFromIndexedDB
+};
+
 initdb();
