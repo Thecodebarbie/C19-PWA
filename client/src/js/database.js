@@ -18,7 +18,7 @@ export const putDb = async (content) => {
   const jateDb = await openDB('jate', 1);
   const tx = jateDb.transaction('jate', 'readwrite');
   const store = tx.objectStore('jate');
-  const request = store.put({ id: 1, jate: content });
+  const request = store.put({ id: 1, todo: content });
   const result = await request;
   console.log('Data saved to the database', result);
 };
@@ -29,31 +29,10 @@ export const getDb = async () => {
   const jateDb = await openDB('jate', 1);
   const tx = jateDb.transaction('jate', 'readonly');
   const store = tx.objectStore('jate');
-  const request = store.getAll();
+  const request = store.get(1);
   const result = await request;
   console.log('result.value', result);
   return result;
-};
-
-function getCodeContentFromIndexedDB() {
-  return new Promise((resolve, reject) => {
-    // Assuming 'db' is your IndexedDB instance and 'store' is the object store
-    const transaction = db.transaction(['store'], 'readonly');
-    const objectStore = transaction.objectStore('store');
-    const request = objectStore.get('codeContent');
-
-    request.onsuccess = function(event) {
-      resolve(request.result);
-    };
-
-    request.onerror = function(event) {
-      reject('Error retrieving data from IndexedDB');
-    };
-  });
-}
-
-module.exports = {
-  getCodeContentFromIndexedDB
 };
 
 initdb();
